@@ -6,7 +6,7 @@ export class User {
   id: number;
 
   @Column()
-  name: string;
+  firstName: string;
 
   @Column()
   lastName: string;
@@ -15,8 +15,8 @@ export class User {
   age: number;
 
   @Column()
-  sex: 'male' | 'female';
+  gender: 'male' | 'female';
 
   @Column()
-  problems: boolean;
+  hasIssues: boolean;
 }

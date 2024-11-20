@@ -15,9 +15,10 @@ import { UsersModule } from './users/users.module';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        synchronize: true,
+        synchronize: false,
         logging: false,
-
+        entities: [__dirname + '/**/*.entity{.js, .ts}'],
+        migrations: [__dirname + '/migrations/*{.js, .ts}'],
         subscribers: [],
         parseInt8: true,
       }),
