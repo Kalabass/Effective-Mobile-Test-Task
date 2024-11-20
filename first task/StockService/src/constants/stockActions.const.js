@@ -1,0 +1,5 @@
+export const stockActions = {
+  CREATE: 'CREATE_STOCK',
+  INCREASE: 'INCREASE_STOCK',
+  DECREASE: 'DECREASE_STOCK',
+};

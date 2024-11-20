@@ -1,10 +1,10 @@
 import { check } from 'express-validator';
 export const validateStock = [
-  check('PLU')
+  check('plu')
     .exists({ checkFalsy: true })
-    .withMessage('PLU is required')
+    .withMessage('plu is required')
     .isString()
-    .withMessage('PLU must be a string'),
+    .withMessage('plu must be a string'),
   check('shop_id')
     .exists({ checkFalsy: true })
     .withMessage('shop_id is required')
