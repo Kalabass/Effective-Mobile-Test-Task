@@ -10,11 +10,36 @@ class HistoryController {
 
   getFilteredHistory = async (req, res) => {
     try {
-      const history = await historyRepository.getFilteredHistory({
-        ...req.body,
+      const {
+        shop_id,
+        plu,
+        action,
+        date_from,
+        date_to,
+        page = 1,
+        limit = 10,
+      } = req.body;
+      const offset = (page - 1) * limit;
+
+      const { data, total } = await historyRepository.getFilteredHistory({
+        shop_id,
+        plu,
+        action,
+        date_from,
+        date_to,
+        limit,
+        offset,
       });
 
-      return res.status(200).json({ data: history });
+      res.status(200).json({
+        data,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      });
     } catch (error) {
       this.ErrorHandler(error, res, 'Error during getting filtered history');
     }

@@ -1,0 +1,11 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./ 
+RUN npm install
+
+COPY . .
+
+
+CMD npx node-pg-migrate up --lock && npm run start

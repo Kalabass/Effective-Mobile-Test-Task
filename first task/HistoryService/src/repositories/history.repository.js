@@ -12,9 +12,18 @@ class HistoryRepository {
     return result.rows[0];
   };
 
-  getFilteredHistory = async ({ shop_id, plu, action, date_from, date_to }) => {
+  getFilteredHistory = async ({
+    shop_id,
+    plu,
+    action,
+    date_from,
+    date_to,
+    limit,
+    offset,
+  }) => {
     const result = await db.query(
-      `SELECT * FROM history 
+      `SELECT *, COUNT(*) OVER() AS total_count
+       FROM history
        WHERE ($1::integer IS NULL OR shop_id = $1::integer)
          AND ($2::text IS NULL OR PLU = $2::text)
          AND ($3::text IS NULL OR action = $3::text)
@@ -24,11 +33,16 @@ class HistoryRepository {
            ($4::timestamp IS NULL AND $5::timestamp IS NOT NULL AND date <= $5::timestamp) OR
            ($4::timestamp IS NULL AND $5::timestamp IS NULL)
          )
-       ORDER BY date DESC`,
-      [shop_id, plu, action, date_from, date_to]
+       ORDER BY date DESC
+       LIMIT $6
+       OFFSET $7`,
+      [shop_id, plu, action, date_from, date_to, limit, offset]
     );
 
-    return result.rows;
+    const rows = result.rows;
+    const total = rows.length > 0 ? parseInt(rows[0].total_count, 10) : 0;
+
+    return { data: rows, total };
   };
 }
 

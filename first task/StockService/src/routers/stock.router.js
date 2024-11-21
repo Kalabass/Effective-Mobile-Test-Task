@@ -6,12 +6,14 @@ import { validateStock } from '../validators/stock.validator.js';
 const stockRouter = new Router();
 
 stockRouter.post('/stock/filtered', stockController.getFIlteredStock);
+
 stockRouter.post(
   '/stock',
   validateStock,
   handleValidationErrors,
   stockController.createStock
 );
+
 stockRouter.patch(
   '/stock/increase',
   validateStock,

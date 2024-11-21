@@ -59,13 +59,25 @@ class StockController {
 
   decreaseStock = async (req, res) => {
     try {
+      const { plu, shop_id, amount_in_shop, amount_in_order } = req.body;
+
+      const stock = await stockRepository.getOneStock(plu, shop_id);
+
+      if (!stock) return res.status(404).json({ message: 'Stock not found' });
+
+      if (amount_in_shop > stock.products_in_shop)
+        return res
+          .status(400)
+          .json({ message: 'Cannot decrease more than available in shop' });
+
+      if (amount_in_order > stock.products_in_order)
+        return res
+          .status(400)
+          .json({ message: 'Cannot decrease more than available in order' });
+
       const updatedStock = await stockRepository.decreaseStock({
         ...req.body,
       });
-
-      if (!updatedStock) {
-        return res.status(404).json({ message: 'Stock not found' });
-      }
 
       inventoryService.processAction(stockActions.DECREASE, updatedStock);
 
